@@ -6,9 +6,9 @@ import java.util.concurrent.Semaphore;
 
 public class Main {
 
-    // Classe interna que representa l'aparcament
+    // Creació classe ParkingLot
     static class ParkingLot {
-        private final Semaphore semaphore;
+        private final Semaphore semaphore; // Controla l'accés a l'aparcament
 
         public ParkingLot(int capacitat) {
             this.semaphore = new Semaphore(capacitat);
@@ -17,7 +17,7 @@ public class Main {
         public void entrar(String cotxe) {
             System.out.println(cotxe + " intentant entrar a l'aparcament...");
             try {
-                semaphore.acquire();
+                semaphore.acquire(); // Espera si no hi ha espai
                 System.out.println(cotxe + " ha entrat a l'aparcament.");
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -36,8 +36,8 @@ public class Main {
         final int capacitatAparcament = 2;
         final int totalCotxes = 5;
 
-        ParkingLot aparcament = new ParkingLot(capacitatAparcament);
-        ExecutorService executor = Executors.newFixedThreadPool(totalCotxes);
+        ParkingLot aparcament = new ParkingLot(capacitatAparcament); // Atribut capacitat aparcament
+        ExecutorService executor = Executors.newFixedThreadPool(totalCotxes); // Executor per gestionar els cotxes
 
         for (int i = 1; i <= totalCotxes; i++) {
             final String cotxeNom = "Cotxe " + i;
@@ -46,9 +46,9 @@ public class Main {
                 try {
                     Thread.sleep(3000); // Simulem estada a l'aparcament
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    Thread.currentThread().interrupt(); // Restaurar l'estat d'interrupció
                 } finally {
-                    aparcament.sortir(cotxeNom);
+                    aparcament.sortir(cotxeNom); // Assegurem que el cotxe surt
                 }
             });
         }
